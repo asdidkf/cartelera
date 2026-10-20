@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -17,9 +18,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import gautrin.fernando.cartelera.ui.theme.CarteleraTheme
 
 @Composable
@@ -42,8 +46,11 @@ fun LoginScreen(onLoginOk: () -> Unit){
         OutlinedTextField(
             value = usuario,
             onValueChange = { usuario = it },
-            label = { Text("Usuario") },
+            label = { Text("Correo electrónico") },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
             isError = hayError,
             modifier = Modifier.fillMaxWidth()
         )
@@ -64,10 +71,17 @@ fun LoginScreen(onLoginOk: () -> Unit){
         }
         Button(
             onClick = {
-                if (usuario.trim() == "admin" && contrasena == "adminpass123") {
-                    onLoginOk()
-                } else {
+                if (usuario.isBlank() || contrasena.isBlank()) {
                     hayError = true
+                } else {
+                    Firebase.auth.signInWithEmailAndPassword(usuario.trim(), contrasena)
+                        .addOnCompleteListener { tarea ->
+                            if (tarea.isSuccessful) {
+                                onLoginOk()
+                            } else {
+                                hayError = true
+                            }
+                        }
                 }
             },
             modifier = Modifier.fillMaxWidth()
