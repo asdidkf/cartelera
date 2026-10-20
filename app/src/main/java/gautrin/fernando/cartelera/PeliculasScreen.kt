@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,13 +28,18 @@ import androidx.compose.ui.unit.dp
 import gautrin.fernando.cartelera.ui.theme.CarteleraTheme
 
 @Composable
-fun PeliculasScreen(onPeliculaClick: (Int) -> Unit) {
+fun PeliculasScreen(
+    correo: String,
+    onPeliculaClick: (Int) -> Unit,
+    onCerrarSesion: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Películas",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(16.dp)
         )
+        Text(text = correo, style = MaterialTheme.typography.bodySmall)
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -47,6 +53,7 @@ fun PeliculasScreen(onPeliculaClick: (Int) -> Unit) {
             }
         }
     }
+    TextButton(onClick = onCerrarSesion) { Text("Cerrar sesión") }
 }
 
 @Composable
@@ -86,6 +93,10 @@ fun PeliculaItem(pelicula: Pelicula, onClick: () -> Unit) {
 @Composable
 fun PeliculasScreenPreview(){
     CarteleraTheme{
-        PeliculasScreen(onPeliculaClick = { })
-    }
+        PeliculasScreen(
+            correo = "fernando@correo.com",
+            onPeliculaClick = { },
+            onCerrarSesion = { }
+        )
+   }
 }

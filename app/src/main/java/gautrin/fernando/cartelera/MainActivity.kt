@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
             CarteleraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppNavigation(modifier = Modifier.padding(innerPadding))
+                    //RegistroScreen(onRegistroOk = {}, onCancelar = {})
                 }
             }
         }
